@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ssrename"
+version = "0.1.0"
+description = "CLI tool to automatically rename screenshots using local AI-based image understanding"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Merin Theres Jose" }
+]
+
+dependencies = [
+  "typer",
+  "rich"
+]
+
+[project.scripts]
+ssrename = "ssrename.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
