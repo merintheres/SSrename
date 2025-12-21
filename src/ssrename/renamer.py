@@ -1,28 +1,39 @@
-from pathlib import Path
-from ssrename.image_loader import ImageLoader
-from ssrename.safety import SafetyManager
-from ssrename.filename_generator import FilenameGenerator
 from rich.console import Console
+from ssrename.image_loader import ImageLoader
+from ssrename.ocr_engine import OCREngine
+from ssrename.caption_model import CaptionModel
+from ssrename.filename_generator import FilenameGenerator
+from ssrename.safety import SafetyManager
 
 class ScreenshotRenamer:
-    def __init__(self, path: Path, dry_run: bool):
+    def __init__(self, path, dry_run):
         self.path = path
         self.dry_run = dry_run
         self.console = Console()
-        self.filename_generator = FilenameGenerator()
+        self.ocr = OCREngine()
+        self.caption = None
+        self.generator = FilenameGenerator()
 
     def run(self):
-        self._validate_path()
         images = ImageLoader(self.path).load_images()
-        SafetyManager(self.console).preview(images, self._generate_names, self.dry_run)
+        SafetyManager(self.console).preview(
+            images,
+            self._generate_names,
+            self.dry_run
+        )
 
     def _generate_names(self, images):
         names = []
-        for img in images:
-            base = self.filename_generator.generate(img.stem)
-            names.append(f"{base}{img.suffix}")
-        return names
 
-    def _validate_path(self):
-        if not self.path.exists() or not self.path.is_dir():
-            raise ValueError("Provided path is not a valid directory")
+        for img in images:
+            text = self.ocr.extract_text(img).strip()
+
+            if len(text.split()) < 10:
+                if self.caption is None:
+                    self.caption = CaptionModel()
+                text = self.caption.describe(img)
+
+            base = self.generator.generate(text)
+            names.append(f"{base}{img.suffix}")
+
+        return names
