@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ssrename"
 version = "0.1.0"
-description = "CLI tool to automatically rename screenshots using local AI-based image understanding"
+description = "CLI tool to automatically rename screenshots using OCR and local vision-language models"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -14,15 +14,22 @@ authors = [
 ]
 
 dependencies = [
-  "typer",
-  "rich"
+  "typer>=0.9",
+  "rich>=13.0",
+  "easyocr>=1.7",
+  "transformers>=4.36",
+  "torch",
+  "torchvision",
+  "Pillow",
+  "opencv-python-headless",
+  "numpy"
 ]
 
 [project.scripts]
 ssrename = "ssrename.cli:main"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
