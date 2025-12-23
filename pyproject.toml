@@ -25,6 +25,9 @@ dependencies = [
   "numpy"
 ]
 
+[project.optional-dependencies]
+dev = ["pytest"]
+
 [project.scripts]
 ssrename = "ssrename.cli:main"
 
