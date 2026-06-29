@@ -1,4 +1,6 @@
-# SSrename
+# SSrename 
+
+![Tests](https://github.com/merintheres/SSrename/actions/workflows/python-package.yml/badge.svg)
 
 SSrename is a Python CLI tool that automatically renames screenshots using **OCR-first text extraction** with an **AI-based fallback** for images that lack sufficient readable text.
 
